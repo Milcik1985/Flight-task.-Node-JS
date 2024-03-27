@@ -19,7 +19,6 @@ app.listen(process.env.PORT, () => {
     console.log(`App is running on port ${process.env.PORT}`)
 });
 
-// 5. Aprašant endpointus naudotis endpointų konvencijomis konvencijomis;
 // 6. Parašyti endpointą kuris indikuotu ar applikacija yra nulūžus ar ne, jei applikacija nėra nulūžus sekmės json žinutė turi būt gražinta;
 // 7. Padaryt endpointą kuris priimą gražinamų rezultatų sakičių ir puslapio skaičių. Endpointas gražina reikalaujamą skaičių skrydžių;
 // // pagination

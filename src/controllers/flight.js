@@ -2,6 +2,7 @@
 // 2. Skrydį sudaro: id, kaina, departureCity, destinationCity, destinationCityPhotoUrl, departure time;
 // 3. Visi duomenys turi būt saugomi masyvo kintamajam;
 // 4. Turi but 5 endpointai, skrydžio įdėjimas, visu skrydžių gavimas, vieno skrydžio gavimas pagal id, skrydžio ištrinimas pagal id bei skrydžio atnaujinimas pagal id;
+// 5. Aprašant endpointus naudotis endpointų konvencijomis konvencijomis;
 let flights = [];
 
 const CREATE_FLIGHT = (req, res) => {
@@ -66,5 +67,36 @@ const UPDATE_FLIGHT_BY_ID = (req, res) => {
     return res.json({updatedFlight: flights[index]})
 }
 
+let isAppCrashed = false;
 
-export {CREATE_FLIGHT, GET_ALL_FLIGHTS, GET_FLIGHT_BY_ID, DELETE_FLIGHT_BY_ID, UPDATE_FLIGHT_BY_ID}
+const WHETHER_APP_IS_CRASHED = (req, res) => {
+    if (isAppCrashed) {
+        return res.status(500).json({success: false, message: "App is crashed"})
+    } else {
+        return res.json({success: true, message: "App works"})
+    }
+}
+
+
+export {CREATE_FLIGHT, GET_ALL_FLIGHTS, GET_FLIGHT_BY_ID, DELETE_FLIGHT_BY_ID, UPDATE_FLIGHT_BY_ID, WHETHER_APP_IS_CRASHED}
+
+/*
+{
+    "id": 1,
+    "price": 39.85,
+    "departureCity": "Vilnius",
+    "destinationCity": "Oslo",
+    "destinationCityPhotoUrl": "https://www.fjordtours.com/media/10920/froydislehne-instagram-19th-jul-2020-1901-utc.jpeg?anchor=center&mode=crop&width=1120&height=1120&rnd=133208597010000000&slimmage=True"
+}
+
+{
+    "id": 2,
+    "price": 40.30,
+    "departureCity": "Vilnius",
+    "destinationCity": "Stockholm",
+    "destinationCityPhotoUrl": "https://www.google.com/url?sa=i&url=https%3A%2F%2Fworldcitiescultureforum.com%2Fcity%2Fstockholm%2F&psig=AOvVaw2RVDXETIKCXi1tH2PvsXje&ust=1711616468509000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCODx7baKlIUDFQAAAAAdAAAAABAD"
+}
+
+
+
+*/
