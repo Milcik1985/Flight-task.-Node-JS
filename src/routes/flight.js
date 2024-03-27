@@ -4,7 +4,8 @@ import {CREATE_FLIGHT,
     GET_FLIGHT_BY_ID, 
     DELETE_FLIGHT_BY_ID, 
     UPDATE_FLIGHT_BY_ID,
-    WHETHER_APP_IS_CRASHED} from "../controllers/flight.js";
+    WHETHER_APP_IS_CRASHED,
+    PAGINATION} from "../controllers/flight.js";
 const router = express.Router();
 
 router.post("/flights", CREATE_FLIGHT);
@@ -13,6 +14,7 @@ router.get("/flights/:id", GET_FLIGHT_BY_ID);
 router.delete("/flights/:id", DELETE_FLIGHT_BY_ID);
 router.put("/flights/:id", UPDATE_FLIGHT_BY_ID);
 router.get("/checkAppStatus", WHETHER_APP_IS_CRASHED);
+router.get("/flightsPerPage", PAGINATION);
 
 
 export default router;

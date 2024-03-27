@@ -77,8 +77,16 @@ const WHETHER_APP_IS_CRASHED = (req, res) => {
     }
 }
 
+const PAGINATION = (req, res) => {
+    const {limit = 10, page = 1} = req.query;
+    const startIndex = (page -1) * limit;
+const endIndex = page * limit;
+const paginatedFlights = flights.slice(startIndex, endIndex);
 
-export {CREATE_FLIGHT, GET_ALL_FLIGHTS, GET_FLIGHT_BY_ID, DELETE_FLIGHT_BY_ID, UPDATE_FLIGHT_BY_ID, WHETHER_APP_IS_CRASHED}
+res.json({success: true, flights: paginatedFlights})}
+
+
+export {CREATE_FLIGHT, GET_ALL_FLIGHTS, GET_FLIGHT_BY_ID, DELETE_FLIGHT_BY_ID, UPDATE_FLIGHT_BY_ID, WHETHER_APP_IS_CRASHED, PAGINATION}
 
 /*
 {
