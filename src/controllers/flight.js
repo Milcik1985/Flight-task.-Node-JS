@@ -1,9 +1,9 @@
 // 1. Sukurti rest api  skirta kelioniniam skrydžiui (flight);
 // 2. Skrydį sudaro: id, kaina, departureCity, destinationCity, destinationCityPhotoUrl, departure time;
 // 3. Visi duomenys turi būt saugomi masyvo kintamajam;
+// 4. Turi but 5 endpointai, skrydžio įdėjimas, visu skrydžių gavimas, vieno skrydžio gavimas pagal id, skrydžio ištrinimas pagal id bei skrydžio atnaujinimas pagal id;
 let flights = [];
 
-// 4. Turi but 5 endpointai, skrydžio įdėjimas, visu skrydžių gavimas, vieno skrydžio gavimas pagal id, skrydžio ištrinimas pagal id bei skrydžio atnaujinimas pagal id;
 const CREATE_FLIGHT = (req, res) => {
     const existingFlight = flights.find(flight => flight.id === req.body.id);
     if (existingFlight) {
