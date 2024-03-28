@@ -33,4 +33,3 @@ app.listen(process.env.PORT, () => {
 
 // 4. Controller faile sukuriant product įdėti jį į duombazę.
 // 6. Prisijungus prie DB connect linką iškelti į .env failą;+
-// 7. Parašytas fn apjuosti try / catch;
