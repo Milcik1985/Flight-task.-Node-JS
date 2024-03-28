@@ -3,35 +3,41 @@
 // 3. Visi duomenys turi būt saugomi masyvo kintamajam;
 // 4. Turi but 5 endpointai, skrydžio įdėjimas, visu skrydžių gavimas, vieno skrydžio gavimas pagal id, skrydžio ištrinimas pagal id bei skrydžio atnaujinimas pagal id;
 // 5. Aprašant endpointus naudotis endpointų konvencijomis konvencijomis;
+import flightSchema from "../models/flights.js";
+
 let flights = [];
 
-const CREATE_FLIGHT = (req, res) => {
-    const existingFlight = flights.find(flight => flight.id === req.body.id);
-    if (existingFlight) {
-        return res.status(409).json({status: "Conflict", message: "Movie with this id already exists"})
+// 7. Parašytas fn apjuosti try / catch;
+const CREATE_FLIGHT = async (req, res) => {
+    try {
+        const flight = new flightSchema({
+            price: req.body.price,
+            departureCity: req.body.departureCity,
+            destinationCity: req.body.destinationCity,
+            destinationCityPhotoUrl: req.body.destinationCityPhotoUrl,
+        });
+        
+        const response = await flight.save();
+        
+        console.log("Flight", flight)
+        
+        return res.status(200).json({status: "Flight is created", response: response})
+        
+    } catch(err) {
+        console.log("handled error:", err);
+        return res.status(500).json({message: "error occured"});
     }
+};
 
-    const flight = {
-        "id": req.body.id.toString(),
-        "price": req.body.price,
-        "departureCity": req.body.departureCity,
-        "destinationCity": req.body.destinationCity,
-        "destinationCityPhotoUrl": req.body.destinationCityPhotoUrl,
+// 5. Sutvarkyt GET ALL PRODUCTS, kad duomenis būti imami iš duombazės;
+const GET_ALL_FLIGHTS = async (req, res) => {
+    try {
+        const flights = await flightSchema.find();
+        return res.json({flights: flights})
+    } catch(err) {
+        console.log("Handled error:", err);
+        return res.status(500).json({message: "Error ocured"})
     }
-
-    flights.push(flight);
-    
-    console.log("Flight", flight)
-
-    return res.status(200).json({status: "Flight is created"})
-
-}
-
-const GET_ALL_FLIGHTS = (req, res) => {
-    if (flights.length === 0) {
-        return res.status(200).json({status: "Data does not exist"})
-    }
-    return res.json({flights: flights})
 }
 
 const GET_FLIGHT_BY_ID = (req, res) => {
@@ -77,16 +83,51 @@ const WHETHER_APP_IS_CRASHED = (req, res) => {
     }
 }
 
+// const PAGINATION = (req, res) => {
+//     const {limit = 10, page = 1} = req.query;
+//     const startIndex = (page -1) * limit;
+// const endIndex = page * limit;
+// const paginatedFlights = flights.slice(startIndex, endIndex);
+
+// res.json({success: true, flights: paginatedFlights})}
+
+// const paginatedFlights = [1,2,3,4,5,6,7,8,9,10,11,12,13]
+// const pagination1 = (itemsNumber, pageNumber) => {
+//     const firstElement = (pageNumber - 1) * itemsNumber;
+//     const lastElement = firstElement + itemsNumber;
+
+//     return paginatedFlights.slice(firstElement, lastElement)
+
+// }
+
+// const items = pagination1(3, 3);
+// console.log(items);
+
+
 const PAGINATION = (req, res) => {
-    const {limit = 10, page = 1} = req.query;
-    const startIndex = (page -1) * limit;
-const endIndex = page * limit;
-const paginatedFlights = flights.slice(startIndex, endIndex);
+    const { flightsNumber, pageNumber } = req.query;
 
-res.json({success: true, flights: paginatedFlights})}
+    if (!flightsNumber || !pageNumber || isNaN(flightsNumber) || isNaN(pageNumber)) {
+        return res.status(400).json({ message: "Invalid pagination parameters" });
+    }
 
+    try {
+        const startIndex = (pageNumber - 1) * flightsNumber;
+        const endIndex = pageNumber * flightsNumber;
+
+        const paginatedFlights = flights.slice(startIndex, endIndex);
+
+        return res.status(200).json({ flights: paginatedFlights });
+    } catch (error) {
+        console.error("Error occurred during pagination:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+};
 
 export {CREATE_FLIGHT, GET_ALL_FLIGHTS, GET_FLIGHT_BY_ID, DELETE_FLIGHT_BY_ID, UPDATE_FLIGHT_BY_ID, WHETHER_APP_IS_CRASHED, PAGINATION}
+
+
+
 
 /*
 {
